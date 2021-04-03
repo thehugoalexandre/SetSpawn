@@ -14,7 +14,6 @@ namespace SetSpawn
         private static string FolderMaps = "scripts\\SetSpawn\\Maps";
         public int verify;
 
-
         public SetSpawn()
         {
             this.ServerStart();
@@ -45,9 +44,9 @@ namespace SetSpawn
         private static void onPlayerSpawn(Entity player)
         {
             string CurrMap = _mapname;
-            string str1 = (string)null;
-            string str2 = (string)null;
-            string str3 = (string)null;
+            string PoxX = (string)null;
+            string PoxY = (string)null;
+            string PoxZ = (string)null;
             string GetMap = (string)null;
 
             if (_mapname == null)
@@ -58,49 +57,16 @@ namespace SetSpawn
             {
                 foreach (string str in File.ReadAllLines("scripts\\SetSpawn\\Maps\\" + _mapname + ".txt"))
                 {
-                    if (str.StartsWith("Map"))
-                    {
-                        GetMap = str.Split(new char[1]
-                        {
-                             '='
-                        })[1];
-                    }
+                    GetMap = str.StartsWith("Map") ? str.Split(new char[1] { '=' })[1] : GetMap;
+                    PoxX = str.StartsWith("PosX") ? str.Split(new char[1] { '=' })[1] : PoxX;
+                    PoxY = str.StartsWith("PosY") ? str.Split(new char[1] { '=' })[1] : PoxY;
+                    PoxZ = str.StartsWith("PosZ") ? str.Split(new char[1] { '=' })[1] : PoxZ;
                 }
                 if (GetMap == CurrMap)
                 {
-                    foreach (string str4 in File.ReadAllLines("scripts\\SetSpawn\\Maps\\" + _mapname + ".txt"))
-                    {
-                        if (str4.StartsWith("PosX"))
-                        {
-                            str1 = str4.Split(new char[1]
-                            {
-                                '='
-                            })[1];
-                        }
-                    }
-                    foreach (string str5 in File.ReadAllLines("scripts\\SetSpawn\\Maps\\" + _mapname + ".txt"))
-                    {
-                        if (str5.StartsWith("PosY"))
-                        {
-                            str2 = str5.Split(new char[1]
-                            {
-                                 '='
-                            })[1];
-                        }
-                    }
-                    foreach (string str6 in File.ReadAllLines("scripts\\SetSpawn\\Maps\\" + _mapname + ".txt"))
-                    {
-                        if (str6.StartsWith("PosZ"))
-                        {
-                            str3 = str6.Split(new char[1]
-                            {
-                                 '='
-                            })[1];
-                        }
-                    }
-                    float x = Convert.ToSingle(str1, new CultureInfo("en-US"));
-                    float y = Convert.ToSingle(str2, new CultureInfo("en-US"));
-                    float z = Convert.ToSingle(str3, new CultureInfo("en-US"));
+                    float x = Convert.ToSingle(PoxX, new CultureInfo("en-US"));
+                    float y = Convert.ToSingle(PoxY, new CultureInfo("en-US"));
+                    float z = Convert.ToSingle(PoxZ, new CultureInfo("en-US"));
 
                     player.SetOrigin(new Vector3(x, y, z));
                 }
@@ -147,8 +113,8 @@ namespace SetSpawn
                 }
                 if (Array[1] == password)
                 {
-                    verify = 1;
                     Utilities.RawSayTo(player, "^7Console: ^7You have been successfully logged in!");
+                    verify = 1;
                     return BaseScript.EventEat.EatGame;
                 }
                 else
